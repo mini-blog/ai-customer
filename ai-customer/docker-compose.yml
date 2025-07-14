@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: ecommerce_customer_service
+      MYSQL_USER: dify
+      MYSQL_PASSWORD: dify123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ecommerce_network
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecommerce_network
+
+  # NestJS API服务
+  api:
+    build:
+      context: ./nestjs-api
+      dockerfile: Dockerfile
+    container_name: ecommerce_api
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: dify
+      DB_PASSWORD: dify123456
+      DB_DATABASE: ecommerce_customer_service
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      ALLOWED_ORIGINS: http://localhost:3000,http://localhost:3002
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - ecommerce_network
+
+  # 后台管理前端
+  admin-frontend:
+    build:
+      context: ./admin-frontend
+      dockerfile: Dockerfile
+    container_name: ecommerce_admin_frontend
+    restart: always
+    ports:
+      - "3002:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:3001
+    depends_on:
+      - api
+    networks:
+      - ecommerce_network
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: ecommerce_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - api
+      - admin-frontend
+    networks:
+      - ecommerce_network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  ecommerce_network:
+    driver: bridge 

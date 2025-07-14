@@ -1,0 +1,265 @@
+app:
+  description: 专业的电商客服智能体，支持商品咨询、订单查询、售后服务等
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 电商客服智能体
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.18@959677bb0c4753407cd1143d5e1548b8de416eb5b38993fcf4630b79d9033e2e
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables:
+  - description: 对话记忆
+    id: 7f8421e6-533c-4959-adc2-b21eb552f401
+    name: memory
+    selector:
+    - conversation
+    - memory
+    value: []
+    value_type: array[string]
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      selected: false
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      id: 1752469496606-source-1752469513224-target
+      source: '1752469496606'
+      sourceHandle: source
+      target: '1752469513224'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1752469513224-source-llm-target
+      source: '1752469513224'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: assigner
+      id: 1752469496606-source-1752470352370-target
+      source: '1752469496606'
+      sourceHandle: source
+      target: '1752470352370'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: llm
+      id: 1752470352370-source-llm-target
+      source: '1752470352370'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 54
+      id: '1752469496606'
+      position:
+        x: -33
+        y: 318
+      positionAbsolute:
+        x: -33
+        y: 318
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1752469513224'
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: Qwen/Qwen3-235B-A22B
+          provider: langgenius/siliconflow/siliconflow
+        prompt_template:
+        - id: 395df8f2-59ea-4d84-bff0-0f21cb702726
+          role: system
+          text: "你现在是智能电商客服，根据用户的提问{{#sys.query#}}来回答用户的问题\n请合并以下信息：             \
+            \ \n知识库信息：{{#context#}}\n对话记忆：{{#conversation.memory#}}\n回答用户的提问。"
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: llm
+      position:
+        x: 538
+        y: 299
+      positionAbsolute:
+        x: 538
+        y: 299
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#llm.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 105
+      id: answer
+      position:
+        x: 913.0061517877245
+        y: 299
+      positionAbsolute:
+        x: 913.0061517877245
+        y: 299
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - NNZsl350Y18jorQarmgQT08C6gHxKOhlvbJPor94EwOGGD5ZvA3nf6xqIHrW2Kns
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: false
+          reranking_mode: reranking_model
+          reranking_model:
+            model: netease-youdao/bce-reranker-base_v1
+            provider: langgenius/siliconflow/siliconflow
+          top_k: 4
+        query_variable_selector:
+        - '1752469496606'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索
+        type: knowledge-retrieval
+      height: 92
+      id: '1752469513224'
+      position:
+        x: 258
+        y: 220
+      positionAbsolute:
+        x: 258
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        items:
+        - input_type: variable
+          operation: append
+          value:
+          - sys
+          - query
+          variable_selector:
+          - conversation
+          - memory
+          write_mode: over-write
+        selected: false
+        title: 对话记忆
+        type: assigner
+        version: '2'
+      height: 88
+      id: '1752470352370'
+      position:
+        x: 254
+        y: 379
+      positionAbsolute:
+        x: 254
+        y: 379
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -292.07015964570087
+      y: 150.13511023147
+      zoom: 0.6937834701807396
