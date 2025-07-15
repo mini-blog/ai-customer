@@ -23,8 +23,8 @@ export class Conversation {
   @Column({ type: 'json', nullable: true })
   metadata: any;
 
-  @Column({ default: 'active' })
-  status: string;
+  @Column({ type: 'enum', enum: ['active', 'closed', 'archived'], default: 'active' })
+  status: 'active' | 'closed' | 'archived';
 
   @OneToMany(() => Message, message => message.conversation)
   messages: Message[];

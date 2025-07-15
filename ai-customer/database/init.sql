@@ -69,7 +69,7 @@ INSERT INTO users (username, password, email, role) VALUES
 
 -- 插入示例智能体
 INSERT INTO customer_service_agents (name, description, difyAppId, difyApiKey, difyBaseUrl) VALUES 
-('电商客服智能体', '专业的电商客服智能体，支持商品咨询、订单查询、售后服务等', 'app-123456789', 'sk-123456789', 'http://localhost:5001');
+('电商客服智能体', '专业的电商客服智能体，支持商品咨询、订单查询、售后服务等', 'app-123456789', 'sk-123456789', 'http://host.docker.internal');
 
 -- 创建索引
 CREATE INDEX idx_agents_active ON customer_service_agents(isActive);

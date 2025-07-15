@@ -13,8 +13,8 @@ export class Message {
   @JoinColumn({ name: 'conversationId' })
   conversation: Conversation;
 
-  @Column({ enum: ['user', 'assistant'] })
-  role: string;
+  @Column({ type: 'enum', enum: ['user', 'assistant'] })
+  role: 'user' | 'assistant';
 
   @Column({ type: 'text' })
   content: string;
