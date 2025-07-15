@@ -112,11 +112,23 @@ workflow:
       type: custom
       zIndex: 0
     - data:
+        isInIteration: false
         isInLoop: false
         sourceType: assigner
-        targetType: llm
-      id: 1752470352370-source-llm-target
+        targetType: code
+      id: 1752470352370-source-1752544498616-target
       source: '1752470352370'
+      sourceHandle: source
+      target: '1752544498616'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1752544498616-source-llm-target
+      source: '1752544498616'
       sourceHandle: source
       target: llm
       targetHandle: target
@@ -132,11 +144,11 @@ workflow:
       height: 54
       id: '1752469496606'
       position:
-        x: -33
-        y: 318
+        x: 30
+        y: 252.5
       positionAbsolute:
-        x: -33
-        y: 318
+        x: 30
+        y: 252.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -159,7 +171,7 @@ workflow:
         - id: 395df8f2-59ea-4d84-bff0-0f21cb702726
           role: system
           text: "你现在是智能电商客服，根据用户的提问{{#sys.query#}}来回答用户的问题\n请合并以下信息：             \
-            \ \n知识库信息：{{#context#}}\n对话记忆：{{#conversation.memory#}}\n回答用户的提问。"
+            \ \n知识库信息：{{#context#}}\n对话记忆：{{#1752544498616.result#}}\n回答用户的提问。"
         selected: false
         title: LLM
         type: llm
@@ -169,12 +181,12 @@ workflow:
       height: 90
       id: llm
       position:
-        x: 538
-        y: 299
+        x: 942
+        y: 252.5
       positionAbsolute:
-        x: 538
-        y: 299
-      selected: true
+        x: 942
+        y: 252.5
+      selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
@@ -189,11 +201,11 @@ workflow:
       height: 105
       id: answer
       position:
-        x: 913.0061517877245
-        y: 299
+        x: 1246
+        y: 252.5
       positionAbsolute:
-        x: 913.0061517877245
-        y: 299
+        x: 1246
+        y: 252.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -220,11 +232,11 @@ workflow:
       height: 92
       id: '1752469513224'
       position:
-        x: 258
-        y: 220
+        x: 638
+        y: 252.5
       positionAbsolute:
-        x: 258
-        y: 220
+        x: 638
+        y: 252.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -249,17 +261,48 @@ workflow:
       height: 88
       id: '1752470352370'
       position:
-        x: 254
-        y: 379
+        x: 304
+        y: 366.92857142857144
       positionAbsolute:
-        x: 254
-        y: 379
+        x: 304
+        y: 366.92857142857144
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
+    - data:
+        code: "\nfunction main({arg1}) {\n    return {\n        result: arg1.slice(-50)\n\
+          \    }\n}\n"
+        code_language: javascript
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: array[string]
+        selected: false
+        title: 最近50个对话
+        type: code
+        variables:
+        - value_selector:
+          - conversation
+          - memory
+          value_type: array[string]
+          variable: arg1
+      height: 54
+      id: '1752544498616'
+      position:
+        x: 642.2857142857143
+        y: 371.64285714285717
+      positionAbsolute:
+        x: 642.2857142857143
+        y: 371.64285714285717
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
     viewport:
-      x: -292.07015964570087
-      y: 150.13511023147
-      zoom: 0.6937834701807396
+      x: -25
+      y: 42.00000000000006
+      zoom: 0.7

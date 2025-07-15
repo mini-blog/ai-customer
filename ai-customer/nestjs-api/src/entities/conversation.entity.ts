@@ -34,4 +34,7 @@ export class Conversation {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ default: 0 })
+  totalMessages: number;
 } 

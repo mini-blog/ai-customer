@@ -44,7 +44,7 @@ export class DifyService {
   ): Promise<DifyMessageResponse> {
     try {
       const response = await this.axiosInstance.post(
-        `${baseUrl}/v1/chat-messages`,
+        `${baseUrl}/chat-messages`,
         request,
         {
           headers: {

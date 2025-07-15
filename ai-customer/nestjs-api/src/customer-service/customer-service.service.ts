@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
 import { Conversation } from '../entities/conversation.entity';
 import { Message } from '../entities/message.entity';
 import { CustomerServiceAgent } from '../entities/customer-service-agent.entity';
@@ -17,7 +16,7 @@ export interface ChatRequest {
 export interface ChatResponse {
   answer: string;
   sessionId: string;
-  conversationId: string;
+  conversationId: number;
   intent?: string;
   confidence?: number;
 }
@@ -45,7 +44,7 @@ export class CustomerServiceService {
     }
 
     // 生成或获取会话ID
-    const sessionId = request.sessionId || uuidv4();
+    const sessionId = request.sessionId;
 
     // 查找或创建对话
     let conversation = await this.conversationRepository.findOne({
@@ -104,6 +103,7 @@ export class CustomerServiceService {
 
     // 更新对话统计
     await this.conversationRepository.update(conversation.id, {
+      sessionId: difyResponse.conversation_id,
       totalMessages: conversation.totalMessages + 2,
     });
 
@@ -114,8 +114,8 @@ export class CustomerServiceService {
 
     return {
       answer: difyResponse.answer,
-      sessionId,
-      conversationId: difyResponse.conversation_id,
+      sessionId: difyResponse.conversation_id,
+      conversationId: conversation.id,
     };
   }
 

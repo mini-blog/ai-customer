@@ -6,9 +6,8 @@ import {
   DashboardOutlined,
   RobotOutlined,
   MessageOutlined,
-  UserOutlined,
   LogoutOutlined,
-  ChatOutlined,
+  WechatOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -40,7 +39,7 @@ const Sidebar: React.FC = () => {
     },
     {
       key: '/test-chat',
-      icon: <ChatOutlined />,
+      icon: <WechatOutlined />,
       label: '聊天测试',
     },
   ];

@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS conversations (
   userId VARCHAR(100),
   agentId INT NOT NULL,
   metadata JSON,
+  totalMessages INT DEFAULT 0,
   status ENUM('active', 'closed', 'archived') DEFAULT 'active',
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
